@@ -24,7 +24,7 @@ import os
 app = Flask(__name__)
 
 # 1. Initialize RAG Components
-os.environ["GOOGLE_API_KEY"] = "AIzaSyBupdX_IHTKbyRnqkD_4LhyTj7IoJQkJpI"
+os.environ["GOOGLE_API_KEY"] = "********Google API Key********"
 
 loader = PyPDFLoader("Pharmacy Dictionary.pdf")
 data = loader.load()
@@ -76,4 +76,5 @@ def ask():
     return jsonify({"answer": response["answer"]})
 
 if __name__ == '__main__':
+
     app.run(debug=True, port=8080)
