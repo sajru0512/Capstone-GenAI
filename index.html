@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pharmacy Dictionary AI</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; line-height: 1.6; }
+        #answer-box { 
+    margin-top: 20px; 
+    padding: 20px; 
+    border-left: 6px solid #007bff; 
+    background: #ffffff; 
+    display: none; 
+
+    /* DYNAMIC SIZING */
+    height: auto;           /* Box grows with text */
+    min-height: 150px;      /* Never looks too small */
+    max-height: 60vh;       /* Cap at 60% of screen height to avoid huge pages */
+    overflow-y: auto;       /* Adds scrollbar ONLY when text exceeds max-height */
+    
+    /* WRAPPING PROTECTION */
+    overflow-wrap: break-word; /* Prevents long chemical names from breaking the box */
+    word-wrap: break-word;
+    
+    /* STYLING */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    line-height: 1.6;        /* Spacing between lines for readability */
+}
+
+/* Custom Scrollbar for a cleaner look */
+#answer-box::-webkit-scrollbar {
+    width: 8px;
+}
+#answer-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+        input { width: 80%; padding: 10px; }
+        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h1>Pharmacy Dictionary Assistant</h1>
+    <p>Ask anything about medications, dosages, or terminology:</p>
+    
+    <input type="text" id="question" placeholder="e.g., What is Metformin?">
+    <button onclick="askQuestion()">Ask</button>
+
+    <div id="answer-box">
+        <strong>Answer:</strong>
+        <p id="answer-text"></p>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const question = document.getElementById('question').value;
+            const answerBox = document.getElementById('answer-box');
+            const answerText = document.getElementById('answer-text');
+
+            answerText.innerText = "Processing...";
+            answerBox.style.display = "block";
+
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: question })
+            });
+
+            const data = await response.json();
+            answerText.innerText = data.answer || "Error: " + data.error;
+        }
+    </script>
+</body>
+</html>
